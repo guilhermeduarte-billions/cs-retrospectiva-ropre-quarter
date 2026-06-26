@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Retrospectiva ROPRE — {{CLIENTE}} — {{PERIODO}}</title>
+<!--
+  TEMPLATE BASE — cs-retrospectiva-ropre-quarter
+  Preencher {{placeholders}}. Manter HTML limpo (cola no Google Docs).
+  Proveniência por dado: [NEKT] [Cockpit] [Ekyte] [CRM] [Call] [WhatsApp].
+  Onde faltar fonte, usar bloco .slot. Remover seções/linhas não aplicáveis.
+  LEITURA: Projetado → Realizado (esquerda para direita). Quarter com colunas mensais + Total Q.
+-->
+<style>
+  body{font-family:Arial,Helvetica,sans-serif;color:#1a1a1a;line-height:1.45;max-width:960px;margin:24px auto;padding:0 16px;}
+  h1{font-size:22px;margin:0 0 2px;}
+  h2{background:#e30613;color:#fff;padding:6px 10px;font-size:15px;margin:26px 0 10px;}
+  h3{font-size:13px;margin:16px 0 6px;color:#e30613;text-transform:uppercase;letter-spacing:.3px;}
+  table{border-collapse:collapse;width:100%;font-size:12px;margin:8px 0;}
+  th,td{border:1px solid #ccc;padding:5px 7px;text-align:left;}
+  th{background:#f2f2f2;} td.n,th.n{text-align:right;}
+  th.q,td.q{background:#fafafa;font-weight:bold;}
+  .meta{font-size:11px;color:#666;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding:6px 0;margin:6px 0 4px;}
+  .ok{color:#127a2e;font-weight:bold;} .bad{color:#c0140c;font-weight:bold;}
+  .slot{background:#fff7d6;border:1px dashed #d9a800;padding:8px 10px;font-size:12px;margin:6px 0;}
+  .prov{color:#888;font-size:10px;}
+  .note{background:#eef3fb;border-left:4px solid #2f6fd1;padding:8px 10px;font-size:12px;margin:10px 0;}
+  .quote{font-style:italic;border-left:3px solid #ccc;padding-left:10px;margin:6px 0;font-size:12px;}
+  ul{margin:4px 0 8px 18px;padding:0;} li{margin:2px 0;}
+</style>
+</head>
+<body>
+
+<h1>Retrospectiva ROPRE — {{CLIENTE}} ({{TICKER}})</h1>
+<div class="meta">NEKT/FLOW · projectDocumentId=<b>{{DOCUMENT_ID}}</b> · platform={{PLATAFORMAS}} · período=<b>{{PERIODO}}</b> · tools={{TOOLS}} · provider=nekt</div>
+<!-- PERIODO: "Q{n}/{ano} (fechado, mensal+total)" ou "amostra {mês} — quarter incompleto" -->
+
+<h2>1. Visão geral do projeto</h2>
+<table>
+  <tr><th>Cliente</th><td>{{CLIENTE}} ({{TICKER}})</td><th>Squad / Coord</th><td>{{SQUAD}} · {{COORD}}</td></tr>
+  <tr><th>Modelo de negócio</th><td>{{MODELO}} · {{B2B_B2C}} <span class="prov">[Cockpit]</span></td><th>Segmento</th><td>{{SEGMENTO}}</td></tr>
+  <tr><th>Fee</th><td>{{FEE}}</td><th>Plano de mídia</th><td>{{BUDGET_POR_CANAL}} <span class="prov">[Cockpit]</span></td></tr>
+  <tr><th>Flag / HS</th><td>{{FLAG}}</td><th>LT</th><td>{{LT}}</td></tr>
+  <tr><th>CRM</th><td>{{CRM}} <span class="prov">[Cockpit]</span></td><th>Critério MQL</th><td>{{CRITERIO_MQL}} <span class="prov">[Cockpit]</span></td></tr>
+  <tr><th>Equipe</th><td colspan="3">{{EQUIPE}} <span class="prov">[Cockpit]</span></td></tr>
+</table>
+
+<h2>2. Resultado do quarter</h2>
+<table>
+  <tr><th>Meta alinhada</th><td>{{META_TIPO}}</td><th class="n">Projetado</th><th class="n">Realizado</th><th class="n">Pacing</th></tr>
+  <tr><td colspan="2">{{META_DESCRICAO}}</td><td class="n">{{META_QTD}}</td><td class="n">{{REALIZADO_QTD}}</td><td class="n">{{PACING_PCT}}</td></tr>
+</table>
+<!-- Se houver divergência entre results_* e paid_traffic_*, usar .note sinalizando -->
+<h3>Funil do quarter <span class="prov">[Cockpit]</span></h3>
+<table>
+  <tr><th>Etapa</th><th class="n">Projetado</th><th class="n">Realizado</th><th class="n">Pacing</th></tr>
+  <tr><td>Leads</td><td class="n">{{...}}</td><td class="n">{{...}}</td><td class="n">{{...}}</td></tr>
+  <tr><td>MQL</td><td class="n">{{...}}</td><td class="n">{{...}}</td><td class="n">{{...}}</td></tr>
+  <tr><td>SQL</td><td class="n">{{...}}</td><td class="n">{{...}}</td><td class="n">{{...}}</td></tr>
+  <tr><td>Vendas</td><td class="n">{{...}}</td><td class="n">{{...}}</td><td class="n">{{...}}</td></tr>
+  <tr><td>Receita</td><td class="n">{{...}}</td><td class="n">{{...}}</td><td class="n">{{...}}</td></tr>
+</table>
+<div class="note"><b>Leitura do quarter:</b> {{GARGALO_E_TENDENCIA_TRIMESTRAL}}</div>
+
+<h2>3. Investimentos e Resultados — {{CANAL}} <span class="prov">[NEKT]</span></h2>
+<!-- Colunas: meses do quarter (esq→dir) + Total Q à direita -->
+<table>
+  <tr><th>Métrica</th>{{COLUNAS_MESES}}<th class="n q">Total Q</th></tr>
+  <tr><td>Investimento</td>{{...}}<td class="n q">{{...}}</td></tr>
+  <tr><td>Impressões · Cliques · CTR · CPC · CPM</td>{{...}}<td class="n q">{{...}}</td></tr>
+  <tr><td>Page View · Hook Rate · Connect Rate</td>{{...}}<td class="n q">{{...}}</td></tr>
+  <tr><td>Leads · CPL · Conversas</td>{{...}}<td class="n q">{{...}}</td></tr>
+  <!-- E-commerce: sempre ROAS + CPA na mesma linha ou adjacentes -->
+  <tr><td>Compras · Receita · ROAS · CPA</td>{{...}}<td class="n q">{{...}}</td></tr>
+  <tr><td>MQL · SQL · Vendas · CP-Venda</td>{{...}}<td class="n q">{{...}}</td></tr>
+</table>
+<div class="note"><b>Síntese do quarter ({{CANAL}}):</b> {{SINTESE_TRIMESTRAL_CANAL}}</div>
+<div class="slot">SLOT: {{SLOTS_TRAFEGO — ex. recompra; canal Google sem conexão NEKT}}</div>
+
+<h2>4. O que deu certo / o que não deu certo</h2>
+<h3>✅ Leads / Conversão — o que deu certo</h3>
+<table><tr><th>Campanha / Conjunto / Criativo</th><th class="n">{{KPI_VOL}}</th><th class="n">{{KPI_CUSTO}}</th><th class="n">ROAS</th><th class="n">CPA</th></tr>{{LINHAS_OK}}</table>
+<h3>❌ Leads / Conversão — o que não deu certo</h3>
+<table><tr><th>Campanha / Conjunto / Criativo</th><th class="n">{{KPI_VOL}}</th><th class="n">{{KPI_CUSTO}}</th><th class="n">ROAS</th><th class="n">CPA</th></tr>{{LINHAS_BAD}}</table>
+<h3>Engajamento / Tráfego / Awareness (métrica do objetivo — não CPL/ROAS)</h3>
+<table><tr><th>Campanha</th><th>Objetivo</th><th class="n">Invest.</th><th class="n">Métrica primária</th><th class="n">Custo/un.</th></tr>{{LINHAS_ENGAJAMENTO}}</table>
+<div class="note"><b>Leitura do quarter:</b> {{LEITURA_TRIMESTRAL_TRAFEGO}}</div>
+
+<h2>5. Criativo / Comunicação</h2>
+<table><tr><th>Criativo</th><th>Formato</th><th class="n">{{KPI_VOL}}</th><th class="n">CPL/CPA</th><th class="n">ROAS</th></tr>{{LINHAS_CRIATIVO}}</table>
+<p><b>Copy vencedora:</b> {{COPY_BODY}} <span class="prov">[NEKT creative_summary]</span></p>
+<div class="slot">SLOT: preview/imagem do criativo (não vem no creative_summary).</div>
+
+<h2>6. Gestão de Projetos / Entregas <span class="prov">[Ekyte + Cockpit]</span></h2>
+<h3>Resumo por tipo <span class="prov">[Ekyte]</span></h3>
+<table class="ekyte-summary">
+  <tr><th>Tipo</th><th class="n">Qtd</th><th class="n">%</th><th>Exemplos</th></tr>
+  {{ENTREGAS_RESUMO_TIPO}}
+</table>
+<h3>Detalhe por tipo</h3>
+{{ENTREGAS_DETALHADAS_VISUAL}}
+<p>SLA · status · anomalias: {{STATUS_GP}} <span class="prov">[Cockpit deliveries_*]</span></p>
+<div class="slot">SLOT: ekyte_list_tasks se não puxado.</div>
+
+<h2>7. Cliente</h2>
+<h3>7a. Síntese de sentimento no quarter <span class="prov">[IA · BigQuery Calls + WhatsApp]</span></h3>
+<p>{{SINTESE_SENTIMENTO_IA}}</p>
+<p class="note" style="font-size:11px">Neutro — não atribuir citações. Não copiar <code>call_transcription_summary_reasoning</code> do cockpit.</p>
+
+<h3>7b. O que o CLIENTE disse <span class="prov">[BigQuery · só speaker cliente]</span></h3>
+<p><b>Elogios / satisfação</b></p>
+<ul>{{VERBATIM_CLIENTE_ELOGIOS}}</ul>
+<p><b>Pontos de atenção / pedidos</b></p>
+<ul>{{VERBATIM_CLIENTE_ATENCAO}}</ul>
+<div class="slot">SLOT: se não isolar speaker na transcrição, não inventar — deixar em aberto.</div>
+
+<h3>7c. Conquistas do quarter (time V4) <span class="prov">[BigQuery V4 + dados]</span></h3>
+<p><b>Na call (time V4)</b></p>
+<ul>{{VERBATIM_V4_CALL}}</ul>
+<p><b>Conquistas objetivas do quarter</b></p>
+<ul>{{CONQUISTAS_DADOS}}</ul>
+
+<h3>7d. Apoio quantitativo <span class="prov">[Cockpit]</span></h3>
+<table><tr><th>Sentiment geral</th><td>{{...}}</td><th>Por vertical</th><td>{{SCORES_VERTICAL}}</td></tr></table>
+<div class="slot">SLOT: {{CSAT/NPS/WhatsApp se null}}</div>
+
+<h2>8. Aprendizados &amp; Ações — por integrante</h2>
+<p style="font-size:12px;color:#555;">Problemas pré-preenchidos pelos dados do quarter; Soluções/Ações preenchidas pelo time.</p>
+<table>
+  <tr><th style="width:50%;">Problemas (auto)</th><th>Soluções / Ações (time)</th></tr>
+  <tr><td colspan="2" style="background:#e30613;color:#fff;"><b>{{PAPEL}} — {{NOME}}</b></td></tr>
+  <tr><td>{{PROBLEMA_AUTO}}</td><td class="slot">Ação proposta: __________</td></tr>
+</table>
+
+</body>
+</html>

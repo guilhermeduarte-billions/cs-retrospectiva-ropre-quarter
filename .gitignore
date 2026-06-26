@@ -1,5 +1,7 @@
 _data/
+retrospectivas/
 *.html
+!/.claude/skills/**/assets/*.html
 .env
 .env.*
 **/mcp.env
