@@ -1,0 +1,7 @@
+_data/
+*.html
+.env
+.env.*
+**/mcp.env
+node_modules/
+.DS_Store

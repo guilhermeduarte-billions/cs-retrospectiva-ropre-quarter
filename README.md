@@ -1,0 +1,109 @@
+# cs-retrospectiva-ropre-quarter
+
+Skill de agente (Claude Code, Cursor, Codex) para **gerar retrospectiva de Growth Marketing do quarter** — insumo de reuniões **ROPRE**: mídia (NEKT), cockpit/FLOW, Ekyte, funil Breakeven/Growthpack e (opcional) BigQuery → HTML colável no Google Docs.
+
+**Autor:** [@guilhermeduarte-billions](https://github.com/guilhermeduarte-billions)  
+**Versão da skill:** 1.1.3
+
+---
+
+## ⚠️ Aviso — work in progress
+
+Esta skill está **em iteração ativa**. APIs, parsers e o piloto de scripts podem mudar sem aviso prévio.
+
+- Validada em operação real (Q2/2026), mas **não é produto oficial** da V4 Company.
+- Requer MCPs e credenciais que **você** configura (cockpit/FLOW, Ekyte, etc.) — nada disso vem no repo.
+- Outputs são **rascunhos para reunião**: o time preenche soluções/ações; o agente não inventa dado ausente (usa *slots*).
+- Issues e PRs são bem-vindos; breaking changes são esperados até uma versão **1.x estável**.
+
+Use por sua conta em ambiente de franquia/cliente. Não commitar credenciais, IDs de cliente ou planilhas privadas.
+
+---
+
+## O que faz
+
+1. Descobre projetos do coordenador no **cockpit/FLOW**
+2. Puxa performance e conversões (**NEKT** — Meta/Google)
+3. Monta funil do quarter (**Breakeven/Growthpack** ou cockpit para e-commerce)
+4. Lista entregas **Ekyte** com links
+5. Gera HTML com 8 seções + matriz Problemas | Soluções (ações em branco)
+
+Diferente de `analise-ropre-quarter` (avalia um ROPRE pronto). Esta skill **produz** o conteúdo a partir de dados MCP.
+
+---
+
+## Instalação
+
+### Opção A — Claude Code / Cursor (cópia manual)
+
+```bash
+git clone https://github.com/guilhermeduarte-billions/cs-retrospectiva-ropre-quarter.git
+cp -R cs-retrospectiva-ropre-quarter/.claude/skills/cs-retrospectiva-ropre-quarter \
+  ~/.claude/skills/
+```
+
+No Cursor, o agente também lê `~/.claude/skills/` e espelhos em `.claude/skills/` do projeto.
+
+### Opção B — Só ler a skill no repo
+
+Abra `.claude/skills/cs-retrospectiva-ropre-quarter/SKILL.md` e referências em `references/`.
+
+---
+
+## Pré-requisitos
+
+| Recurso | Uso |
+|---------|-----|
+| MCP **cockpit** / FLOW | `cockpit_query_table`, `flow_media_*`, conexões NEKT |
+| MCP **ekyte** | Entregas concluídas no quarter |
+| MCP **BigQuery** (opcional) | Verbatim cliente vs V4 nas calls |
+| Planilha **Growthpack/Breakeven** | Funil projetado × realizado do quarter |
+
+Configure MCP no seu agente (`~/.cursor/mcp.json`, `~/.claude/mcp.json`, etc.). A skill assume **zero base local** — tudo via MCP em runtime.
+
+---
+
+## Scripts opcionais (piloto)
+
+Pasta `scripts/` — pipeline testado que grava JSON em `_data/` e renderiza HTML:
+
+```bash
+cd scripts
+node _run-fetch.mjs          # cockpit + NEKT (demora — paginação)
+node _fetch-ekyte.mjs
+node _fetch-breakeven-quarter.mjs TICKER
+python3 _build-html.py
+```
+
+Requer `MCP_COCKPIT_JWT` / `MCP_GATEWAY_TOKEN` (ex.: `~/.config/.../mcp.env`). **Não** inclua esse arquivo no git.
+
+---
+
+## Uso no agente
+
+```
+/cs-retrospectiva-ropre-quarter
+```
+
+Ou: *"faz a retrospectiva do quarter do cliente X para o ROPRE"*.
+
+O agente deve ler `SKILL.md` e `references/fontes-mcp.md` antes de chamar tools.
+
+---
+
+## Estrutura
+
+```
+.claude/skills/cs-retrospectiva-ropre-quarter/
+  SKILL.md                 # instruções principais
+  references/              # fontes MCP, pilares, template, runtime
+  assets/                  # template HTML base
+  CHANGELOG.md
+scripts/                   # piloto opcional (fetch + build HTML)
+```
+
+---
+
+## Licença
+
+MIT — veja [LICENSE](LICENSE).
