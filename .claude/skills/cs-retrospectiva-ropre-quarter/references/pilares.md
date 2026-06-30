@@ -2,10 +2,19 @@
 
 Cada pilar segue: **DADOS** (com proveniência) → **APRENDIZADOS** (certo/errado + causa-raiz) → **SLOT DE AÇÃO**.
 
-## 1. Tráfego — *NEKT (Meta + Google, se conectado)*
+## 1. Tráfego — *GrowthPack (macro) + NEKT (micro)*
+
+**Ordem obrigatória: macro → micro.**
+- **Macro (GrowthPack, aba "Acompanhamento Mensal" — § J):** Projetado vs Realizado do **quarter** (leads, investimento, CPL, atingimento) + split por canal (Meta vs Google). O Realizado consolidado **não está no FLOW** — vem da planilha. É o que abre a seção.
+- **Reconciliação:** NEKT vs GrowthPack por canal (investimento + leads); diferença pequena = data de corte. GrowthPack = base oficial.
+- **Micro (NEKT):** estratificação campanha → conjunto/público → anúncio → keyword (rankings e vencedores). Explica *por quê* o número macro foi o que foi.
+
 - **Avalie cada campanha pela métrica do SEU `goal`** (tabela E.1 em `fontes-mcp.md`). Só compare campanhas **dentro do mesmo objetivo**. Campanha de engajamento/Visitas ao Perfil com 0 leads **não é fracasso** → avalie por custo/engajamento, reações, saves, video views, custo/seguidor (`like`).
-- Melhores/piores **campanhas** por objetivo: LEADS→CPL · Conversão→ROAS · TRAFFIC→CPC/Connect Rate · ENGAJAMENTO→custo/engajamento. Ranking **campanha → conjunto → anúncio**.
-- **Públicos/segmentações**: ler de `groupName`/`campaignName` por heurística. Sem regex fixo — nomenclatura varia por coordenação.
+- **Todos os 3 níveis são NÃO-PULÁVEIS** — campanha → conjunto/público → anúncio. Slot só é aceito quando a tool confirma que o dado não existe:
+  - **Campanhas (NÃO-PULÁVEL):** `flow_media_campaign_summary` + `flow_media_conversion_summary` agregado por campanha.
+  - **Conjuntos/Públicos (NÃO-PULÁVEL):** `flow_media_group_summary` por cada campanha ativa. Nome do público vem de `groupName`. Não substituir por slot — tentar sempre.
+  - **Anúncios (NÃO-PULÁVEL):** `flow_media_ad_summary` + breakdown de conversão por ad.
+- **Keywords Google Ads Search (NÃO-PULÁVEL):** Para campanhas de Search, rodar `flow_media_list_tables` para verificar recurso de keyword disponível. Se existir, rodar `flow_media_query` com esse recurso → ranking top 10 keywords (✅ mais conversões / mais baratas · ❌ alto CPC sem conversão). Só slot se `list_tables` confirmar ausência. Ver `fontes-mcp.md` § F.1.
 - **Ambientes**: Connect Rate = `landing_page_view`/`link_click`; Conversion Rate = conversão/`landing_page_view`.
 - **Conversão por modelo**: Inside Sales → leads/CPL/MQL/SQL (cockpit); E-commerce → compras/receita/**ROAS**/CPA (catálogo/remarketing vs frio).
 - Custo por venda / lead **qualificado**: cruzar funil cockpit / CRM; slot se ausente.
