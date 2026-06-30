@@ -3,7 +3,7 @@
 Skill de agente (Claude Code, Cursor, Codex) para **gerar retrospectiva de Growth Marketing do quarter** — insumo de reuniões **ROPRE**: mídia (NEKT), cockpit/FLOW, Ekyte, funil Breakeven/Growthpack e (opcional) BigQuery → HTML colável no Google Docs.
 
 **Autor:** [@guilhermeduarte-billions](https://github.com/guilhermeduarte-billions)  
-**Versão da skill:** 1.1.3
+**Versão da skill:** 1.2.3
 
 ---
 
@@ -22,13 +22,26 @@ Use por sua conta em ambiente de franquia/cliente. Não commitar credenciais, ID
 
 ## O que faz
 
-1. Descobre projetos do coordenador no **cockpit/FLOW**
-2. Puxa performance e conversões (**NEKT** — Meta/Google)
-3. Monta funil do quarter (**Breakeven/Growthpack** ou cockpit para e-commerce)
+Fluxo **macro → micro**:
+
+1. Descobre projetos do coordenador (**cockpit/FLOW** + planilha-mestra de GrowthPacks do squad)
+2. **Macro:** Realizado consolidado do quarter pelo **GrowthPack** (Projetado × Realizado + split por canal) — não existe no FLOW (cockpit é MTD)
+3. **Micro:** estratifica via **NEKT** (campanha → conjunto/público → anúncio → keyword) e **reconcilia NEKT × GrowthPack**
 4. Lista entregas **Ekyte** com links
 5. Gera HTML com 8 seções + matriz Problemas | Soluções (ações em branco)
 
+**Mídia = só NEKT.** O que o NEKT não entrega vira *slot* sinalizado para iteração — a skill **nunca** puxa de API de plataforma.
+
 Diferente de `analise-ropre-quarter` (avalia um ROPRE pronto). Esta skill **produz** o conteúdo a partir de dados MCP.
+
+---
+
+## Novidades (v1.2.x)
+
+- **GrowthPack = Realizado consolidado do quarter (macro→micro).** O Realizado do quarter não está no FLOW; vem da aba *Acompanhamento Mensal* do GrowthPack. Descoberta via planilha-mestra do squad (fallback: campo do cockpit). Acesso por Google Drive MCP / export CSV público / service account.
+- **Mídia = só NEKT.** Proibido contornar por API de plataforma; lacuna do NEKT vira slot para iteração.
+- **Cadeia de ranking não-pulável:** campanha → conjunto/público → anúncio → keyword. Keywords só via NEKT; quando o conector não sincroniza o stream, é *slot de ausência confirmada*.
+- **Vencedores detalhados** (Status + critério de leitura) e **reconciliação NEKT × GrowthPack** obrigatória por canal.
 
 ---
 
