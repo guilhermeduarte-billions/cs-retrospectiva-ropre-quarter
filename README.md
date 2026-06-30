@@ -1,9 +1,9 @@
 # cs-retrospectiva-ropre-quarter
 
-Skill de agente (Claude Code, Cursor, Codex) para **gerar retrospectiva de Growth Marketing do quarter** — insumo de reuniões **ROPRE**: mídia (NEKT), cockpit/FLOW, Ekyte, funil Breakeven/Growthpack e (opcional) BigQuery → HTML colável no Google Docs.
+Skill de agente (Claude Code, Cursor, Codex) para **gerar retrospectiva de Growth Marketing do quarter** — insumo de reuniões **ROPRE**: mídia (NEKT), cockpit/FLOW, Ekyte, funil Breakeven/Growthpack e (opcional) BigQuery → HTML renderizado + **publicação automática no Google Docs** + registro na planilha de Strategy Review.
 
 **Autor:** [@guilhermeduarte-billions](https://github.com/guilhermeduarte-billions)  
-**Versão da skill:** 1.2.3
+**Versão da skill:** 1.3.0
 
 ---
 
@@ -22,19 +22,27 @@ Use por sua conta em ambiente de franquia/cliente. Não commitar credenciais, ID
 
 ## O que faz
 
-Fluxo **macro → micro**:
+Fluxo **macro → micro → publicação**:
 
 1. Descobre projetos do coordenador (**cockpit/FLOW** + planilha-mestra de GrowthPacks do squad)
 2. **Macro:** Realizado consolidado do quarter pelo **GrowthPack** (Projetado × Realizado + split por canal) — não existe no FLOW (cockpit é MTD)
 3. **Micro:** estratifica via **NEKT** (campanha → conjunto/público → anúncio → keyword) e **reconcilia NEKT × GrowthPack**
 4. Lista entregas **Ekyte** com links
 5. Gera HTML com 8 seções + matriz Problemas | Soluções (ações em branco)
+6. **Publica no Google Docs** via `python-docx` + Drive API (`drive.files().update()`) — tabelas nativas, cores V4, slots amarelos; link permanente preservado
+7. **Registra o link** na planilha de Strategy Review via Sheets API (coluna "Retrospectiva AI" + checkbox "Retrospectiva (By AI)")
 
 **Mídia = só NEKT.** O que o NEKT não entrega vira *slot* sinalizado para iteração — a skill **nunca** puxa de API de plataforma.
 
 Diferente de `analise-ropre-quarter` (avalia um ROPRE pronto). Esta skill **produz** o conteúdo a partir de dados MCP.
 
 ---
+
+## Novidades (v1.3.x)
+
+- **Passo 7 — Publicação automática no Google Docs.** Após salvar o HTML, a skill gera um `.docx` via `python-docx` e faz upload via `drive.files().update()` — o Google Doc tem o conteúdo substituído sem mudar o link (mesmo `fileId`). Por que `.docx` e não HTML direto: upload de HTML quebra tabelas e CSS; a conversão `.docx → Google Docs` é fiel (tabelas com bordas, headers vermelhos V4 `#E30613`, slots amarelos `#FFF7D6`).
+- **Registro na planilha de Strategy Review.** Link gravado via Sheets API (coluna U = link, coluna O = `TRUE`). Config do spreadsheet é parâmetro — agnóstico ao squad/Brain.
+- **Validado** em 8 projetos no piloto Q2/2026 (ASSO, LATI, SICA, CDGF, FIEE, SINQ, EZBU, TROPM).
 
 ## Novidades (v1.2.x)
 
@@ -71,6 +79,8 @@ Abra `.claude/skills/cs-retrospectiva-ropre-quarter/SKILL.md` e referências em 
 | MCP **ekyte** | Entregas concluídas no quarter |
 | MCP **BigQuery** (opcional) | Verbatim cliente vs V4 nas calls |
 | Planilha **Growthpack/Breakeven** | Funil projetado × realizado do quarter |
+| **python-docx** + **google-api-python-client** | Passo 7 — geração do .docx e upload para o Google Drive |
+| Credenciais Google (`drive` scope) | `credentials/google_drive_token.json` — para Drive + Sheets API |
 
 Configure MCP no seu agente (`~/.cursor/mcp.json`, `~/.claude/mcp.json`, etc.). A skill assume **zero base local** — tudo via MCP em runtime.
 
